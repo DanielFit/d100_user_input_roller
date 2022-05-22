@@ -1,7 +1,5 @@
 from random import randint
 
-
-
 """for ttrpg game where a d100 die is rolled to determine in a players
 action is successful or not. roll a d100 die, if the roll is <= 
 the skill chosen then it is a success if the roll > than the skill then it
@@ -21,16 +19,13 @@ same rules for success and failure still applying."""
 trauma they will loose health
 """
 
-
-
-
 skills = {"strength":70,"speed":60,"iq":50,"charm":80, "insight": 45}
+penalties = {"easy":-10, "medium":-20,"hard":-30}
+plist = list(penalties.keys())
 dlist = list(skills.keys())
 twodie = ['adv','disadv']
-keywords = dlist + twodie
+keywords = dlist + twodie + plist
 display = ' '.join(dlist)
-
-
 
 def rolltwodie(x):
     doubleroll = [randint(1, 100), randint(1, 100)]
@@ -43,34 +38,25 @@ def rolltwodie(x):
     if x != adv or disadv:
         print(" try adv or disadv")
 
-
-
-
 health = 2
-
-
-
-
-
 
 while health > 0:
     playerinput = input("select skiil from: " + display + "\n")
     useraction = playerinput.split()
     userrool = randint(1, 100)
 
+
     for i in range(len(useraction)):
+
         if useraction[i] not in keywords:
             playerinput = input("select skiil from: " + display + "\n")
             useraction = playerinput.split()
 
-
-    for i in range(len(useraction)):
-
-
         if useraction[i] in skills:
             skillval = skills.get(useraction[i])
-            print(skillval)
 
+        if useraction[i] in penalties:
+            skillval += penalties.get(useraction[i])
 
         if useraction[i] in twodie:
             userrool = rolltwodie(useraction[i])
