@@ -1,3 +1,8 @@
+"""
+This functions purpose is provide the lower or higher number of two dice rolls, 
+with advantage providing the lower number and disadvantage providing the higher number.
+"""
+
 from random import randint
 
 
