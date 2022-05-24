@@ -29,10 +29,16 @@ while main.health > 0:
 
 
     for i in range(len(useraction)):
+        if useraction[i] in variables.healthcontrol:
+            if useraction[i] == "hit":
+                main.health += -1
+            if useraction[i] == "heal":
+                main.health += 1
+            if main.health <=0:
+                print("RIP")
 
         if useraction[i] not in variables.keywords:
-            playerinput = input("select skiil from: " + variables.display + "\n")
-            useraction = playerinput.split()
+         break
 
         if useraction[i] in main.skills:
             skillval = main.skills.get(useraction[i])
@@ -46,15 +52,20 @@ while main.health > 0:
             userrool = diceroller.rolltwodie(useraction[i])
 
 
-    if userrool >= 95:
-        print(userrool,"Critical Fail!")
-    elif userrool > skillval:
-        print(userrool,"Fail")
-    elif userrool <= 5:
-        print(userrool,"critical success")
-    elif userrool < skillval / 4:
-        print(userrool, "extreme success")
-    elif userrool < skillval/2:
-        print(userrool,"hard success")
-    elif userrool < skillval:
-        print(userrool,"success")
+
+        if useraction[i] in main.skills:
+            if userrool >= 95:
+                print(userrool, "Critical Fail!")
+            elif userrool > skillval:
+                print(userrool, "Fail")
+            elif userrool <= 5:
+                print(userrool, "critical success")
+            elif userrool < skillval / 4:
+                print(userrool, "extreme success")
+            elif userrool < skillval / 2:
+                print(userrool, "hard success")
+            elif userrool < skillval:
+                print(userrool, "success")
+
+
+
