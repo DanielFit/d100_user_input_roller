@@ -1,6 +1,9 @@
 from random import randint
 
-"""for ttrpg game where a d100 die is rolled to determine in a players
+"""
+This is a first draft copy kept for analysis
+
+for ttrpg game where a d100 die is rolled to determine in a players
 action is successful or not. roll a d100 die, if the roll is <= 
 the skill chosen then it is a success if the roll > than the skill then it
 is a failed roll. """
