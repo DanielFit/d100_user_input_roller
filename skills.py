@@ -1,5 +1,6 @@
 import main
-import diceroller
+import advantage_diceroller
+
 import variables
 from random import randint
 
@@ -23,49 +24,46 @@ trauma they will loose health
 """
 
 while main.health > 0:
-    playerinput = input("select skiil from: " + variables.display + "\n")
-    useraction = playerinput.split()
-    userrool = randint(1, 100)
+    player_input = input("select skiil from: " + variables.display + "\n")
+    user_action = player_input.split()
+    user_roll = randint(1, 100)
 
+    selected_skill = next((value for value in set(main.skills).intersection(user_action)), None)
+    selected_penalty = next((value for value in set(variables.penalties).intersection(user_action)), None)
+    selected_health_control = next((value for value in set(variables.healthcontrol).intersection(user_action)), None)
+    selected_advantage = next((value for value in set(variables.twodie).intersection(user_action)), None)
 
-    for i in range(len(useraction)):
-        if useraction[i] in variables.healthcontrol:
-            if useraction[i] == "hit":
+    if not selected_skill and not selected_penalty and not selected_health_control and not selected_advantage:
+        break
+
+    if selected_health_control:
+        if selected_health_control in variables.healthcontrol:
+            if selected_health_control == "hit":
                 main.health += -1
-            if useraction[i] == "heal":
+            if selected_health_control == "heal":
                 main.health += 1
             if main.health <=0:
                 print("RIP")
 
-        if useraction[i] not in variables.keywords:
-         break
+    if selected_skill:
+        skill_val = main.skills.get(selected_skill)
 
-        if useraction[i] in main.skills:
-            skillval = main.skills.get(useraction[i])
+    if selected_penalty:
+        skill_val += variables.penalties.get(selected_penalty)
 
+    if selected_advantage:
+        user_roll = advantage_diceroller.roll_two_die(selected_advantage)
 
-        if useraction[i] in variables.penalties:
-            skillval += variables.penalties.get(useraction[i])
-
-
-        if useraction[i] in variables.twodie:
-            userrool = diceroller.rolltwodie(useraction[i])
-
-
-
-        if useraction[i] in main.skills:
-            if userrool >= 95:
-                print(userrool, "Critical Fail!")
-            elif userrool > skillval:
-                print(userrool, "Fail")
-            elif userrool <= 5:
-                print(userrool, "critical success")
-            elif userrool < skillval / 4:
-                print(userrool, "extreme success")
-            elif userrool < skillval / 2:
-                print(userrool, "hard success")
-            elif userrool < skillval:
-                print(userrool, "success")
-
-
-
+    if selected_skill:
+        if user_roll >= 95:
+            print(user_roll, "Critical Fail!")
+        elif user_roll > skill_val:
+            print(user_roll, "Fail")
+        elif user_roll <= 5:
+            print(user_roll, "critical success")
+        elif user_roll < skill_val / 4:
+            print(user_roll, "extreme success")
+        elif user_roll < skill_val / 2:
+            print(user_roll, "hard success")
+        elif user_roll < skill_val:
+            print(user_roll, "success")

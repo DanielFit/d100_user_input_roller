@@ -6,7 +6,7 @@ with advantage providing the lower number and disadvantage providing the higher 
 from random import randint
 
 
-def rolltwodie(x):
+def roll_two_die(x):
     doubleroll = [randint(1, 100), randint(1, 100)]
     adv = min(doubleroll)
     disadv = max(doubleroll)
@@ -14,5 +14,5 @@ def rolltwodie(x):
      return adv
     if x == "disadv":
      return disadv
-    if x != adv or disadv:
+    if x != "adv" or "disadv":
         print(" try adv or disadv")
