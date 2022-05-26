@@ -7,9 +7,9 @@ from random import randint
 
 
 def roll_two_die(x):
-    doubleroll = [randint(1, 100), randint(1, 100)]
-    adv = min(doubleroll)
-    disadv = max(doubleroll)
+    double_roll = [randint(1, 100), randint(1, 100)]
+    adv = min(double_roll)
+    disadv = max(double_roll)
     if x == "adv":
      return adv
     if x == "disadv":

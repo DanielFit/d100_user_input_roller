@@ -1,6 +1,4 @@
-import main
 import advantage_diceroller
-
 import variables
 from random import randint
 
@@ -23,38 +21,50 @@ same rules for success and failure still applying."""
 trauma they will loose health
 """
 
-while main.health > 0:
-    player_input = input("select skiil from: " + variables.display + "\n")
-    user_action = player_input.split()
-    user_roll = randint(1, 100)
 
-    selected_skill = next((value for value in set(main.skills).intersection(user_action)), None)
-    selected_penalty = next((value for value in set(variables.penalties).intersection(user_action)), None)
-    selected_health_control = next((value for value in set(variables.healthcontrol).intersection(user_action)), None)
-    selected_advantage = next((value for value in set(variables.twodie).intersection(user_action)), None)
+class Game:
+    def __init__(self, skills: dict[str, int], health: int):
+        self.player_skills: dict[str, int] = skills
+        self.player_health: int = health
 
-    if not selected_skill and not selected_penalty and not selected_health_control and not selected_advantage:
-        break
+    def start_game_loop(self):
+        while self.player_health > 0:
+            user_input = self.get_user_input()
+            user_roll = self.roll_dice()
 
-    if selected_health_control:
-        if selected_health_control in variables.healthcontrol:
-            if selected_health_control == "hit":
-                main.health += -1
-            if selected_health_control == "heal":
-                main.health += 1
-            if main.health <=0:
-                print("RIP")
+            selected_skill = self.first_or_default(self.player_skills, user_input)
+            selected_penalty = self.first_or_default(variables.penalties, user_input)
+            selected_health_control = self.first_or_default(variables.healthcontrol, user_input)
+            selected_advantage = self.first_or_default(variables.twodie, user_input)
 
-    if selected_skill:
-        skill_val = main.skills.get(selected_skill)
+            if not selected_skill:
+                break
 
-    if selected_penalty:
-        skill_val += variables.penalties.get(selected_penalty)
+            if selected_health_control:
+                self.resolve_player_health(selected_health_control)
 
-    if selected_advantage:
-        user_roll = advantage_diceroller.roll_two_die(selected_advantage)
+            skill_val = self.player_skills.get(selected_skill)
 
-    if selected_skill:
+            if selected_penalty:
+                skill_val += variables.penalties.get(selected_penalty)
+
+            if selected_advantage:
+                user_roll = advantage_diceroller.roll_two_die(selected_advantage)
+
+            self.resolve_dice_roll(user_roll, skill_val)
+
+    def roll_dice(self):
+        return randint(1, 100)
+
+    def resolve_player_health(self, selected_health_control):
+        if selected_health_control == "hit":
+            self.player_health += -1
+        if selected_health_control == "heal":
+            self.player_health += 1
+        if self.player_health <= 0:
+            print("RIP")
+
+    def resolve_dice_roll(self, user_roll, skill_val):
         if user_roll >= 95:
             print(user_roll, "Critical Fail!")
         elif user_roll > skill_val:
@@ -67,3 +77,10 @@ while main.health > 0:
             print(user_roll, "hard success")
         elif user_roll < skill_val:
             print(user_roll, "success")
+
+    def get_user_input(self):
+        player_input = input("select skill from: " + variables.display + "\n")
+        return player_input.split()
+
+    def first_or_default(self, collection_a: dict | list, collection_b: list):
+        return next((value for value in set(collection_a).intersection(collection_b)), None)

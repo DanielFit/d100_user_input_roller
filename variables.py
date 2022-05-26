@@ -1,8 +1,6 @@
-import main
-
 penalties = {"easy":-10, "medium":-20,"hard":-30}
-plist = list(penalties.keys())
-dlist = list(main.skills.keys())
+plist = ['easy', 'medium', 'hard']
+dlist = ['strength', 'speed', 'iq', 'charm', 'insight']
 healthcontrol = ['hit', 'heal']
 twodie = ['adv','disadv']
 keywords = dlist + twodie + plist
